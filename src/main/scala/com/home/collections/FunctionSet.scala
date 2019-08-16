@@ -1,11 +1,11 @@
 package com.home.collections
 
-class Set{
+class FunctionSet {
 
 }
 /**
- * Sample comment to check the commit
- */
-object Set{
-    
+  * Sample comment to check the commit
+  */
+object FunctionsSet {
+
 }

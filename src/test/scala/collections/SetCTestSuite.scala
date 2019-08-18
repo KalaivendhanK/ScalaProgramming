@@ -39,7 +39,7 @@ class SetCTestSuite extends FunSuite with Matchers {
     val third = randomString
     val fourth = randomString
 
-    set.empty.remove(first).size(0) shouldBe 0
+    set.empty.remove(first).size shouldBe 0
 
     val removedOneElement = set.empty.add(first).remove(first)
     removedOneElement(first) shouldBe false
@@ -51,8 +51,7 @@ class SetCTestSuite extends FunSuite with Matchers {
 
     val setToCheckTheNullElements = set.add(first).add(second).add(second).add(third).add(fourth)
     // setToCheckTheNullElements(null) shouldBe false
-    setToCheckTheNullElements.size(0) shouldBe 4
-    println(setToCheckTheNullElements.size(0))
+    setToCheckTheNullElements.size shouldBe 4
 
   }
   /**
@@ -63,7 +62,7 @@ class SetCTestSuite extends FunSuite with Matchers {
     val second = randomString
 
     val setWithDuplicates = set.empty.add(first).add(first).add(second)
-    setWithDuplicates.size(0) shouldBe 2
+    setWithDuplicates.size shouldBe 2
   }
 
   test("calling empty on a NonEmpty set should yield an empty Set") {
@@ -77,7 +76,131 @@ class SetCTestSuite extends FunSuite with Matchers {
     nonEmptySet(second) shouldBe true
     nonEmptyTurnedEmpty(first) shouldBe false
     nonEmptyTurnedEmpty(second) shouldBe false
-    nonEmptyTurnedEmpty.size(0) shouldBe 0
+    nonEmptyTurnedEmpty.size shouldBe 0
+  }
+
+  test("""Check the set constructor : Calling Set("1","2","3") should yield set with the three elemets""") {
+    val first = randomString
+    val second = randomString
+    val third = randomString
+    val fourth = randomString
+
+    SetC(first, second, third) shouldBe a[SetC.NonEmpty]
+
+    val validSet = SetC(first, second, third, first, fourth)
+    validSet(first) shouldBe true
+    validSet(second) shouldBe true
+    validSet(third) shouldBe true
+    validSet.size shouldBe 4
+
+  }
+
+  /**
+    * Tests to check the functionality of Union between Sets
+    */
+  test("Tests on union functionality ") {
+    val first = randomString
+    val second = randomString
+    val third = randomString
+    val fourth = randomString
+
+    val unionedSet1 = SetC(first, second).union(SetC(first, third))
+    val unionedSet2 = SetC(first, second).union(SetC(fourth))
+
+    unionedSet1.size shouldBe 3
+    unionedSet1(second) shouldBe true
+    unionedSet1(fourth) shouldBe false
+    unionedSet2(third) shouldBe false
+    unionedSet2(first) shouldBe true
+  }
+
+  /**
+    * Tests to check the functionality of Intersections between Sets
+    */
+  test("Tests on Intersection functionality") {
+    val first = randomString
+    val second = randomString
+    val third = randomString
+    val fourth = randomString
+
+    val intersectSets1 = SetC(first, second).intersection(SetC(first, third))
+    val intersectSets2 = SetC(first, second).intersection(SetC(fourth))
+
+    intersectSets1.size shouldBe 1
+    intersectSets1(first) shouldBe true
+    intersectSets1(second) shouldBe false
+    intersectSets1(fourth) shouldBe false
+    intersectSets2(third) shouldBe false
+    intersectSets2(first) shouldBe false
+  }
+
+  /**
+    * Test to check the funcionality of isSubset
+    */
+  test("isSubset of an empty set should always be true") {
+    val first = randomString
+    val second = randomString
+    val third = randomString
+    val fourth = randomString
+
+    val emptySet = SetC.empty
+    val validSet = SetC(first, second)
+
+    emptySet.isSubSetOf(validSet) shouldBe true
+  }
+  test("isSubset of an valid set should return true if all values of set 1 are in set 2") {
+    val first = randomString
+    val second = randomString
+    val third = randomString
+    val fourth = randomString
+
+    val set1 = SetC(first)
+    val set2 = SetC(first, second)
+
+    set1.isSubSetOf(set2) shouldBe true
+    set2.isSubSetOf(set1) shouldBe false
+
+  }
+
+  /**
+    * Tests to check the functionality of isEmpty and isNonEmpty
+    */
+  test("isEmpty and isNonEmpty should pose opposite results") {
+    val first = randomString
+    val second = randomString
+    val third = randomString
+    val fourth = randomString
+
+    val emptySet = SetC.empty
+    emptySet.isEmpty shouldBe true
+    emptySet.isNonEmpty shouldBe false
+
+    val validSet = SetC(first, second)
+    validSet.isEmpty shouldBe false
+    validSet.isNonEmpty shouldBe true
+
+    val setTurnedEmpty = validSet.remove(first).remove(second)
+    setTurnedEmpty.isEmpty shouldBe true
+  }
+
+  /**
+    * Test to check the singleton functionality
+    */
+  test("Check the functionality of singleton") {
+    val first = randomString
+    val second = randomString
+
+    val someSet = SetC(first)
+    someSet.isSingleton shouldBe true
+
+    val emptySet = SetC.empty
+    emptySet.isSingleton shouldBe false
+
+    val validSet = SetC(first, second)
+    validSet.isSingleton shouldBe false
+    validSet.remove(first).isSingleton shouldBe true
+    validSet.remove(first).remove(second).isSingleton shouldBe false
+
   }
 
   def randomString: String = scala.util.Random.alphanumeric.take(5).mkString

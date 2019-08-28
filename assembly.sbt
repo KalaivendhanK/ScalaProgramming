@@ -3,6 +3,4 @@ assemblyMergeStrategy in assembly := {
  case x => MergeStrategy.first
 }
 
-test in assembly := {}
-
 assemblyJarName in assembly := "test-assembly.jar"

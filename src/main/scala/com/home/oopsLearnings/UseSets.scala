@@ -7,4 +7,3 @@
 
 //     val additionResult = validSet.fold(0)(_ + _)
 //     println(additionResult)
-// }

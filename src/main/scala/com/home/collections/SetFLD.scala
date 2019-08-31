@@ -7,6 +7,16 @@ trait SetFLD[B] extends (B => Boolean) {
       acc || input == elem
     }
 
+  final override def toString: String =
+    if (isEmpty)
+      "SetFLD()"
+    else {
+      val res = fold(s"SetFLD(") { (acc: String, elem: B) =>
+        acc + elem.toString + ", "
+      }
+      res.replaceAll("..$", "") + ")"
+    }
+
   final def add(input: B): SetFLD[B] =
     fold(SetFLD.NonEmpty[B](input, empty)) { (acc, elem: B) =>
       if (input != elem)
@@ -122,9 +132,13 @@ object SetFLD {
   Below are the apply methods for the companion object SetFLD
  */
   final def apply[B](firstElement: B, inputs: B*): SetFLD[B] =
-    inputs.foldLeft(empty[B].add(firstElement))(_ add _)
+    inputs.foldLeft(empty[B].add(firstElement)) { (acc: SetFLD[B], elem: B) =>
+      acc.add(elem)
+    }
 
   final def apply[B](inputs: Seq[B]): SetFLD[B] =
-    inputs.foldLeft(empty[B])(_ add _)
+    inputs.foldLeft(empty[B]) { (acc: SetFLD[B], elem: B) =>
+      acc.add(elem)
+    }
 
 }

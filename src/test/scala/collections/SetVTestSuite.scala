@@ -1,12 +1,12 @@
 package com.home.testing
 
 import org.scalatest.{ FunSuite, Matchers }
-import com.home.collections.SetFLD2
+import com.home.collections.SetV
 
-class SetFLD2TestSuite extends FunSuite with Matchers {
+class SetVTestSuite extends FunSuite with Matchers {
 
   test("test to check the apply functionality for creating Sets") {
-    val a = SetFLD2(1, 2, 3)
+    val a = SetV(1, 2, 3)
 
     a(1) shouldBe true
     a(2) shouldBe true
@@ -22,17 +22,17 @@ class SetFLD2TestSuite extends FunSuite with Matchers {
     var accum1: Int = 0
     var accum2: Int = 0
 
-    val validSet = SetFLD2(a, b, c).foreach { elem: String =>
+    val validSet = SetV(a, b, c).foreach { elem: String =>
       accum1 += elem.length
     }
-    val twoElementSet = SetFLD2(a, b, c).remove(b).foreach { elem: String =>
+    val twoElementSet = SetV(a, b, c).remove(b).foreach { elem: String =>
       accum2 += elem.length
     }
 
     accum1 shouldBe 15
     accum2 shouldBe 10
 
-    val elementSet = SetFLD2(a, b).add(c).add(b)
+    val elementSet = SetV(a, b).add(c).add(b)
     elementSet(c) shouldBe true
 
     elementSet.size shouldBe 3
@@ -42,11 +42,11 @@ class SetFLD2TestSuite extends FunSuite with Matchers {
     val first = randomString
     val second = randomString
 
-    val setWithOneElement = SetFLD2.empty.add(first)
+    val setWithOneElement = SetV.empty.add(first)
     setWithOneElement(first) shouldBe true
     setWithOneElement(second) shouldBe false
 
-    val setWithTwoElements = SetFLD2.empty.add(first).add(second)
+    val setWithTwoElements = SetV.empty.add(first).add(second)
     setWithTwoElements(first) shouldBe true
     setWithTwoElements(second) shouldBe true
   }
@@ -57,17 +57,17 @@ class SetFLD2TestSuite extends FunSuite with Matchers {
     val third = randomString
     val fourth = randomString
 
-    SetFLD2.empty.remove(first).size shouldBe 0
+    SetV.empty.remove(first).size shouldBe 0
 
-    val removedOneElement = SetFLD2.empty.add(first).remove(first)
+    val removedOneElement = SetV.empty.add(first).remove(first)
     removedOneElement(first) shouldBe false
     removedOneElement(second) shouldBe false
 
-    val removedTwoElements = SetFLD2.empty.add(first).add(second).remove(first)
+    val removedTwoElements = SetV.empty.add(first).add(second).remove(first)
     removedTwoElements(first) shouldBe false
     removedTwoElements(second) shouldBe true
 
-    val setToCheckTheNullElements = SetFLD2.empty.add(first).add(second).add(second).add(third).add(fourth)
+    val setToCheckTheNullElements = SetV.empty.add(first).add(second).add(second).add(third).add(fourth)
     // setToCheckTheNullElements(null) shouldBe false
     setToCheckTheNullElements.size shouldBe 4
 
@@ -77,13 +77,13 @@ class SetFLD2TestSuite extends FunSuite with Matchers {
     val first = randomString
     val second = randomString
 
-    val someSet = SetFLD2(first)
+    val someSet = SetV(first)
     someSet.isSingleton shouldBe true
 
-    val emptySet = SetFLD2.empty
+    val emptySet = SetV.empty
     emptySet.isSingleton shouldBe false
 
-    val validSet = SetFLD2(first, second)
+    val validSet = SetV(first, second)
     validSet.isSingleton shouldBe false
     validSet.remove(first).isSingleton shouldBe true
     validSet.remove(first).remove(second).isSingleton shouldBe false
@@ -95,13 +95,13 @@ class SetFLD2TestSuite extends FunSuite with Matchers {
     val b = "one"
     val c = "four"
 
-    val validSet1 = SetFLD2(a, b, c)
+    val validSet1 = SetV(a, b, c)
 
     val mappedSet1 = validSet1.map { (x: String) =>
       x.length
     }
 
-    mappedSet1 shouldBe an[SetFLD2.NonEmpty[Int]]
+    mappedSet1 shouldBe an[SetV.NonEmpty[Int]]
 
     var acc: Int = 0
     val mappedSet2 = validSet1.map { (x: String) =>
@@ -112,10 +112,10 @@ class SetFLD2TestSuite extends FunSuite with Matchers {
   }
 
   test("test the functionality of flat map by making it to create a chessboard") {
-    val x: SetFLD2[Char] = SetFLD2('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h')
-    val y: SetFLD2[Int] = SetFLD2(1, 2, 3, 4, 5, 6, 7, 8)
+    val x: SetV[Char] = SetV('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h')
+    val y: SetV[Int] = SetV(1, 2, 3, 4, 5, 6, 7, 8)
 
-    val chessboard: SetFLD2[(Char, Int)] = x.flatMap { x =>
+    val chessboard: SetV[(Char, Int)] = x.flatMap { x =>
       y.map { y =>
         (x -> y)
       }
@@ -136,8 +136,8 @@ class SetFLD2TestSuite extends FunSuite with Matchers {
     val d = randomString
     val e = randomString
 
-    val validSet1 = SetFLD2(a, b)
-    val validSet2 = SetFLD2(c, d)
+    val validSet1 = SetV(a, b)
+    val validSet2 = SetV(c, d)
 
     val unionizedSet = validSet1.union(validSet2)
 
@@ -165,8 +165,8 @@ class SetFLD2TestSuite extends FunSuite with Matchers {
     val d = randomString
     val e = randomString
 
-    val validSet1 = SetFLD2(a, b, c)
-    val validSet2 = SetFLD2(b, c, d)
+    val validSet1 = SetV(a, b, c)
+    val validSet2 = SetV(b, c, d)
 
     val intersectionizedSet = validSet1.intersection(validSet2)
 
@@ -192,7 +192,7 @@ class SetFLD2TestSuite extends FunSuite with Matchers {
     val b = randomString
     val c = randomString
 
-    val validSet1 = SetFLD2(a, b, c)
+    val validSet1 = SetV(a, b, c)
 
     val filteredSet = validSet1.filter(_ == a)
 
@@ -205,20 +205,20 @@ class SetFLD2TestSuite extends FunSuite with Matchers {
     val a = randomString
     val b = randomString
 
-    val validSet1 = SetFLD2(a, b)
-    val otherSet = SetFLD2('a', 'b')
+    val validSet1 = SetV(a, b)
+    val otherSet = SetV('a', 'b')
 
     validSet1 should not be otherSet
-    validSet1 shouldBe SetFLD2(a, b)
+    validSet1 shouldBe SetV(a, b)
   }
 
   test("Sets should be able to behave as functions") {
-    val setToTest = SetFLD2("Kalai", "vendhan", "IT Professional", "Cognizant")
+    val setToTest = SetV("Kalai", "vendhan", "IT Professional", "Cognizant")
 
       def realFunct(input: String): Boolean = input == "Kalai" || input == "vendhan"
-    val functSet = SetFLD2("Kalai", "vendhan")
+    val functSet = SetV("Kalai", "vendhan")
 
-    setToTest.filter(realFunct) shouldBe SetFLD2("Kalai", "vendhan")
+    setToTest.filter(realFunct) shouldBe SetV("Kalai", "vendhan")
     setToTest.filter(realFunct) shouldBe setToTest.filter(functSet)
 
     setToTest.filter(functSet)("Kalai") shouldBe true
@@ -229,8 +229,8 @@ class SetFLD2TestSuite extends FunSuite with Matchers {
   }
 
   def randomString: String = scala.util.Random.alphanumeric.take(5).mkString
-  def setMaker(elements: Int): (Seq[String], SetFLD2[String]) = {
+  def setMaker(elements: Int): (Seq[String], SetV[String]) = {
     val elems = (0 until elements).map(_ => randomString)
-    elems -> SetFLD2(elems)
+    elems -> SetV(elems)
   }
 }

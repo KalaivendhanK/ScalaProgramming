@@ -12,6 +12,14 @@ trait SetFLD2[B] extends (B => Boolean) {
     res.replaceAll("..$", "") + ")"
   }
 
+  final override def equals(input: Any): Boolean =
+    input match {
+      case emptySet: SetFLD2.Empty[B] => this.isEmpty
+      case nonEmptySet: SetFLD2.NonEmpty[B] =>
+        fold(false)(_ || nonEmptySet(_))
+      case _ => false
+    }
+
   final def add(input: B): SetFLD2[B] =
     fold(SetFLD2.NonEmpty[B](input, empty)) { (acc, elem: B) =>
       if (input != elem)
@@ -82,6 +90,13 @@ trait SetFLD2[B] extends (B => Boolean) {
     fold(empty[A]) { (acc: SetFLD2[A], element: B) =>
       function(element).fold(acc)(_ add _)
     }
+
+  final def filter(function: B => Boolean): SetFLD2[B] = {
+    fold(empty[B]) { (acc: SetFLD2[B], elem: B) =>
+      if (function(elem)) acc.add(elem)
+      else acc
+    }
+  }
 
   @scala.annotation.tailrec
   final def fold[A](init: A)(function: (A, B) => A): A = {

@@ -10,7 +10,9 @@ libraryDependencies ++= Seq("org.apache.spark" %% "spark-core" % "2.4.3",
 							 "org.scalacheck" %% "scalacheck" % "1.14.0" % "test")
 
 scalacOptions := Seq(
-    "-deprecation"
+    "-deprecation",
+    "-feature",
+    "-language:implicitConversions"
 )
 
 triggeredMessage := Watched.clearWhenTriggered

@@ -1,8 +1,8 @@
 package com.home.collections
 
-trait SetV[B] /*extends (B => Boolean)*/ {
+trait SetV[+B] /*extends (B => Boolean)*/ {
 
-  final /*override*/ def apply(input: B): Boolean =
+  final /*override*/ def apply[S >: B](input: S): Boolean =
     fold(false)(_ || input == _)
 
   final override def toString: String = {
@@ -20,17 +20,17 @@ trait SetV[B] /*extends (B => Boolean)*/ {
       case _ => false
     }
 
-  final def add(input: B): SetV[B] =
-    fold(SetV.NonEmpty[B](input, empty)) { (acc, elem: B) =>
+  final def add[S >: B](input: S): SetV[S] =
+    fold(SetV.NonEmpty[S](input, empty)) { (acc, elem: S) =>
       if (input != elem)
-        SetV.NonEmpty[B](elem, acc)
+        SetV.NonEmpty[S](elem, acc)
       else acc
     }
 
-  final def remove(input: B): SetV[B] =
-    fold(empty[B]) { (acc: SetV[B], elem: B) =>
+  final def remove[S >: B](input: S): SetV[S] =
+    fold(empty[S]) { (acc: SetV[S], elem: S) =>
       if (input != elem)
-        SetV.NonEmpty[B](elem, acc)
+        SetV.NonEmpty[S](elem, acc)
       else
         acc
     }
@@ -40,18 +40,18 @@ trait SetV[B] /*extends (B => Boolean)*/ {
       acc + 1
     }
 
-  final def union(anotherSetV: SetV[B]): SetV[B] =
+  final def union[S >: B](anotherSetV: SetV[S]): SetV[S] =
     fold(anotherSetV)(_ add _)
 
-  final def intersection(anotherSetV: SetV[B]): SetV[B] =
-    fold(SetV.empty[B]) { (acc, elem: B) =>
+  final def intersection[S >: B](anotherSetV: SetV[S]): SetV[S] =
+    fold(SetV.empty[S]) { (acc, elem: S) =>
       if (anotherSetV(elem))
         acc.add(elem)
       else
         acc
     }
 
-  final def isSubSetOf(anotherSetV: SetV[B]): Boolean =
+  final def isSubSetOf[S >: B](anotherSetV: SetV[S]): Boolean =
     fold(true)(_ && anotherSetV(_))
 
   final def isSingleton: Boolean = {

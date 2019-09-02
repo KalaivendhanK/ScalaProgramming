@@ -12,6 +12,7 @@ libraryDependencies ++= Seq("org.apache.spark" %% "spark-core" % "2.4.3",
 scalacOptions := Seq(
     "-deprecation",
     "-feature",
+    "-language:higherKinds",
     "-language:implicitConversions"
 )
 

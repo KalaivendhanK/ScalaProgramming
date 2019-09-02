@@ -17,9 +17,7 @@ trait FunctionSet extends (String => Boolean) {
     this(elem) && !that(elem)
 
 }
-/**
-  * Sample comment to check the commit
-  */
+
 object FunctionSet {
   def empty: FunctionSet = _ => false
 

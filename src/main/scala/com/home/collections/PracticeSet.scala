@@ -23,7 +23,7 @@ object Set {
 
   /**
     * Non Empty Class
-    * @type {[Canbe of any type]}
+    * @type {[Can be of any type]}
     */
   case class NonEmpty[A](elem: A, linkElem: Set[A]) extends Set[A] {
     override def apply(isItem: A): Boolean =
@@ -36,8 +36,10 @@ object Set {
   // private final case class
 
 }
-
+//com.home.collections.Set$Empty$@184f6be2
 object Run extends App {
-  val newSet = Set.Empty
-  println(newSet)
+  val newSet = Set.Empty[String](new String("something"))
+//  println(newSet)
+  val someVariable : Int => String = input => "got it"
+  println(someVariable(14))
 }
